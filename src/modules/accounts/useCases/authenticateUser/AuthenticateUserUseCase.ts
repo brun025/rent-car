@@ -17,6 +17,7 @@ interface IResponse {
   user: {
     name: string;
     email: string;
+    id: string;
   };
   token: string;
   refresh_token: string;
@@ -78,6 +79,7 @@ class AuthenticateUserUseCase {
       user: {
         name: user.name,
         email: user.email,
+        id: user.id,
       },
       refresh_token,
     };
