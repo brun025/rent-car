@@ -7,7 +7,7 @@ import { app } from "@shared/infra/http/app";
 import createConnection from "@shared/infra/typeorm";
 
 let connection: Connection;
-describe("List Category Controller", () => {
+describe("Create Specification Controller", () => {
   beforeAll(async () => {
     connection = await createConnection();
     await connection.runMigrations();
@@ -27,7 +27,7 @@ describe("List Category Controller", () => {
     await connection.close();
   });
 
-  it("should be able to list all categories ", async () => {
+  it("should be able to create a new specification ", async () => {
     const responseToken = await request(app).post("/sessions").send({
       email: "admin@rentx.com.br",
       password: "admin",
@@ -35,19 +35,39 @@ describe("List Category Controller", () => {
 
     const { token } = responseToken.body;
 
-    await request(app)
-      .post("/categories")
+    const response = await request(app)
+      .post("/specifications")
       .send({
-        name: "Category Supertest",
-        description: "Category Supertest",
+        description: "test",
+        name: "test",
       })
       .set({
         Authorization: `Bearer ${token}`,
       });
 
-    const response = await request(app).get("/categories");
+    expect(response.status).toBe(201);
+    expect(response.body).toHaveProperty("name");
+    expect(response.body).toHaveProperty("description");
+  });
 
-    expect(response.status).toBe(200);
-    expect(response.body.length).toBe(1);
+  it("should not be able to create a new specification with exists name", async () => {
+    const responseToken = await request(app).post("/sessions").send({
+      email: "admin@rentx.com.br",
+      password: "admin",
+    });
+
+    const { token } = responseToken.body;
+
+    const response = await request(app)
+      .post("/specifications")
+      .send({
+        description: "test",
+        name: "test",
+      })
+      .set({
+        Authorization: `Bearer ${token}`,
+      });
+
+    expect(response.status).toBe(400);
   });
 });
