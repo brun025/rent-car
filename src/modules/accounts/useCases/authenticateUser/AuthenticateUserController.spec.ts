@@ -7,7 +7,7 @@ import { app } from "@shared/infra/http/app";
 import createConnection from "@shared/infra/typeorm";
 
 let connection: Connection;
-describe("Create Category Controller", () => {
+describe("Authenticate Controller", () => {
   beforeAll(async () => {
     connection = await createConnection();
     await connection.runMigrations();

@@ -17,7 +17,7 @@ class CreateCarSpecificationController {
       specifications_id,
     });
 
-    return response.json(cars);
+    return response.status(201).json(cars);
   }
 }
 
